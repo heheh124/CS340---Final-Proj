@@ -1,4 +1,4 @@
-function deleteHandguns(id){
+function deletePistol(id){
     $.ajax({
         url: '/handguns/' + id,
         type: 'DELETE',

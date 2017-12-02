@@ -47,7 +47,7 @@ module.exports = function(){
     router.get('/', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deletehandguns.js"];
+        context.jsscripts = ["deletepistol.js"];
         var mysql = req.app.get('mysql');
         getHandguns(res, mysql, context, complete);
         getAmmunition(res, mysql, context, complete);
@@ -65,14 +65,14 @@ module.exports = function(){
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
-        context.jsscripts = ["selectedammunition.js", "updatehandguns.js"];
+        context.jsscripts = ["selectedammunition.js", "updatepistol.js"];
         var mysql = req.app.get('mysql');
         getPistol(res, mysql, context, req.params.id, complete);
         getAmmunition(res, mysql, context, complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 2){
-                res.render('update-handguns', context);
+                res.render('update-pistol', context);
             }
 
         }
@@ -98,8 +98,8 @@ module.exports = function(){
 	//edited - no error but doesn't redirect??
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "UPDATE Handguns SET handguns_brand=?, handguns_model=?, handguns_caliber=?, handguns_barrel_length=? WHERE handguns_id=?";
-        var inserts = [req.body.handguns_brand, req.body.handguns_model, req.body.handguns_caliber, req.body.handguns_barrel_length, req.params.id];
+        var sql = "UPDATE Handguns SET handguns_brand=?, handguns_model=?, handguns_caliber=?, handguns_barrel_length=? WHERE handguns_id = ?";
+        var inserts = [req.body.handguns_brand, req.body.handguns_model, req.body.handguns_caliber, req.body.handguns_barrel_length, req.params.id]; //id ok; comes from url "/:id"
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
@@ -116,7 +116,7 @@ module.exports = function(){
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM Handguns WHERE handguns_id = ?";
-        var inserts = [req.params.id];
+        var inserts = [req.params.id]; //id ok; comes from url "/:id"
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));

@@ -1,4 +1,4 @@
-<h1>Update {{pistol.handguns_brand}} {{pistol.handguns_model}}:</h1>
+<h1>Update {{handguns.handguns_brand}} {{handguns.handguns_model}}:</h1>
 <form id="update-handguns" action="/handguns" method="post">
     Brand: <input type="text" name="handguns_brand" value="{{handguns.handguns_brand}}"><br>
     Model: <input type="text" name="handguns_model" value="{{handguns.handguns_model}}"><br>
@@ -9,5 +9,5 @@
     </select><br>
     Barrel Length: <input type="number" name="handguns_barrel_length" value="{{handguns.handguns_barrel_length}}"><br>
 </form>
-<button onclick="updateHandguns({{pistol.id}})">Update</button>
+<button onclick="updatePistol({{pistol.id}})">Update</button>
 <script defer>selectAmmunition({{handguns.handguns_caliber}});</script>
