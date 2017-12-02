@@ -27,19 +27,20 @@ module.exports = function(){
             complete();
         });
     }
-/*
-    function getPerson(res, mysql, context, id, complete){
-        var sql = "SELECT id, fname, lname, homeworld, age FROM bsg_people WHERE id = ?";
+	//edited - 
+    function getPistol(res, mysql, context, id, complete){
+		//do not add any table joins here
+        var sql = "SELECT handguns_id, handguns_brand, handguns_model, handguns_caliber, handguns_barrel_length FROM Handguns WHERE handguns_id = ?";
         var inserts = [id];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.person = results[0];
+            context.pistol = results[0];
             complete();
         });
-    }*/
+    }
 
     /*Display all people. Requires web based javascript to delete users with AJAX*/
 	//edited - ok
@@ -60,14 +61,14 @@ module.exports = function(){
     });
 
     /* Display one person for the specific purpose of updating people */
-	//edited -not ok- need more edits
+	//edited -not ok
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
         context.jsscripts = ["selectedammunition.js", "updatehandguns.js"];
         var mysql = req.app.get('mysql');
-        getPerson(res, mysql, context, req.params.id, complete);
-        getPlanets(res, mysql, context, complete);
+        getPistol(res, mysql, context, req.params.id, complete);
+        getAmmunition(res, mysql, context, complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 2){
@@ -98,7 +99,7 @@ module.exports = function(){
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "UPDATE Handguns SET handguns_brand=?, handguns_model=?, handguns_caliber=?, handguns_barrel_length=? WHERE handguns_id=?";
-        var inserts = [req.body.handguns_brand, req.body.handguns_model, req.body.handguns_caliber, req.body.handguns_barrel_length, req.params.handguns_id];
+        var inserts = [req.body.handguns_brand, req.body.handguns_model, req.body.handguns_caliber, req.body.handguns_barrel_length, req.params.id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
@@ -111,10 +112,10 @@ module.exports = function(){
     });
 
     /* Route to delete a person, simply returns a 202 upon success. Ajax will handle this. */
-	//edited - 
+	//edited - ok
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "DELETE FROM Handguns WHERE id = ?";
+        var sql = "DELETE FROM Handguns WHERE handguns_id = ?";
         var inserts = [req.params.id];
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
