@@ -1,14 +1,11 @@
-<h1>Current handguns:</h1>
-<h1>Handlebars JS Example</h1>
-{{#each foo}}
-{{this}}
-{{/each}}
+<h1>Handguns Database:</h1>
+
 <table>
     <thead> 
-        <th>Handguns Brand</th> 
-        <th>Handguns Model</th> 
-        <th>Handguns Caliber</th>
-        <th>Handguns Barrel Length</th>  
+        <th>Handgun Brand</th> 
+        <th>Handgun Model</th> 
+        <th>Handgun Caliber</th>
+        <th>Handgun Barrel Length</th>  
     </thead> 
     <tbody> 
         {{#each handguns}} 
@@ -24,14 +21,14 @@
     </tbody> 
 	
     <form id="addhandgun" action="/handguns" method="post">
-    Brand: <input type="text" name="handguns_brand"><br>
-    Model: <input type="text" name="handguns_model"><br>
-    Caliber: <select name="handguns_caliber"> 
-        {{#each handguns_caliber}}
-        <option value="{{id}}">{{name}}</option>
+    Handgun Brand: <input type="text" name="handguns_brand"><br>
+    Handgun Model: <input type="text" name="handguns_model"><br>
+    Handgun Caliber: <select name="handguns_caliber"> 
+        {{#each ammunition_caliber}}
+        <option value="{{ammunition_id}}">{{ammunition_caliber}}</option>
         {{/each}}
     </select><br>
-    Barrel Length: <input type="text" name="handguns_barrel_length"><br>
+    Handgun Barrel Length: <input type="number" name="handguns_barrel_length"><br>
     <input type="submit" value="Submit">
     </form>
 </table> 
