@@ -1,0 +1,55 @@
+<h1>Accessories Database</h1>
+
+<table width="800">
+	<col width="200">
+	<col width="200">
+	<col width="200">
+	<col width="200">
+	<style>
+		table {border: 2px solid black;}
+		td, th {border: 1px solid black}
+		th {background: #AED6F1;}
+	</style>
+    <thead> 
+        <th>Accessory Brand</th> 
+        <th>Accessory Model</th> 
+        <th>Accessory Type</th>
+        <th>Compatibility</th>  
+    </thead> 
+    <tbody> 
+        {{#each accessories}} 
+        <tr> 
+            <td align="center">{{accessories_brand}}</td> 
+            <td align="center">{{accessories_model}}</td> 
+            <td align="center">{{accessories_type}}</td> 
+            <td align="center">{{compatibility}}</td>
+            <td style="border: 0px;"><button onclick="deleteAccessory({{accessories_id}})">Delete</button></td>
+            <td style="border: 0px;"><a href="/accessories/{{accessories_id}}">Update</a></td>
+        </tr> 
+        {{/each}}	
+    </tbody>
+	
+	<h5>Please fill in the following information to populate the table below.</h5>
+	<form id="addaccessory" action="/accessories" method="post">
+    Accessory Brand: <input type="text" name="accessories_brand"><br>
+    Accessory Model: <input type="text" name="accessories_model"><br>
+    Accessory Type: 
+		<select name="accessories_type">
+			<option value="Bipod">Bipod</option>
+			<option value="Flashlight">Flashlight</option>
+			<option value="Holster">Holster</option>
+			<option value="Laser">Laser</option>
+			<option value="Sight">Sight</option>
+			<option value="Scope">Scope</option>
+    </select><br>
+    Compatibility:
+		<select name="compatibility">
+			<option value="Handguns">Handguns</option>
+			<option value="Rifles">Rifles</option>
+		</select><br>
+    <input type="submit" value="Submit">
+    </form>
+	<br><br>
+</table>
+<br><br>
+Go <a href="http://flip1.engr.oregonstate.edu:7004/home">Home.</a>  

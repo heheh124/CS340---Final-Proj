@@ -1,9 +1,8 @@
 module.exports = function(){
     var express = require('express');
     var router = express.Router();
-	//edited - ok
+	
     function getAmmunition(res, mysql, context, complete){
-        //mysql.pool.query("SELECT id, name FROM bsg_planets", function(error, results, fields){
 		mysql.pool.query("SELECT ammunition_id, ammunition_caliber FROM Ammunition", function(error, results, fields){	
             if(error){
                 res.write(JSON.stringify(error));
@@ -13,12 +12,12 @@ module.exports = function(){
             complete();
         });
     }
-	//edited - ok
+
     function getHandguns(res, mysql, context, complete){
-		//this works too but only shows the manually added data
+		//this query shows SQL-added data and form-added data but does not update caliber correctly
 		/*mysql.pool.query("SELECT Handguns.handguns_id, handguns_brand, handguns_model, handguns_caliber, handguns_barrel_length FROM Handguns INNER JOIN Ammunition A ON A.ammunition_id = Handguns.handguns_id", function(error, results, fields){*/
-		//this query below shows the added data as well
-        mysql.pool.query("SELECT Handguns.handguns_id, handguns_brand, handguns_model, Ammunition.ammunition_caliber AS handguns_caliber, handguns_barrel_length FROM Handguns INNER JOIN Ammunition ON handguns_caliber = Ammunition.ammunition_id", function(error, results, fields){    
+		//this query only shows form-added data but updates caliber correctly
+        mysql.pool.query("SELECT Handguns.handguns_id, handguns_brand, handguns_model, Ammunition.ammunition_caliber AS handguns_caliber, handguns_barrel_length FROM Handguns INNER JOIN Ammunition ON handguns_caliber = Ammunition.ammunition_id", function(error, results, fields){
 			if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -27,7 +26,6 @@ module.exports = function(){
             complete();
         });
     }
-	//edited - ok
     function getPistol(res, mysql, context, id, complete){
 		//handguns_id or id ok
 		//do not add any table joins here
@@ -43,8 +41,7 @@ module.exports = function(){
         });
     }
 
-    /*Display all people. Requires web based javascript to delete users with AJAX*/
-	//edited - ok
+    //Display all handguns
     router.get('/', function(req, res){
         var callbackCount = 0;
         var context = {};
@@ -61,8 +58,7 @@ module.exports = function(){
         }
     });
 
-    /* Display one person for the specific purpose of updating people */
-	//edited -not ok
+    //Display one handgun for updating
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
@@ -79,8 +75,7 @@ module.exports = function(){
         }
     });
 
-    /* Adds a person, redirects to the people page after adding */
-	//edited - ok
+    //Adds a handgun
     router.post('/', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "INSERT INTO Handguns (handguns_brand, handguns_model, handguns_caliber, handguns_barrel_length) VALUES (?,?,?,?)";
@@ -95,8 +90,7 @@ module.exports = function(){
         });
     });
 
-    /* The URI that update data is sent to in order to update a person */
-	//edited - ok
+    //For updating handguns
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "UPDATE Handguns SET handguns_brand=?, handguns_model=?, handguns_caliber=?, handguns_barrel_length=? WHERE handguns_id = ?";
@@ -112,8 +106,7 @@ module.exports = function(){
         });
     });
 
-    /* Route to delete a person, simply returns a 202 upon success. Ajax will handle this. */
-	//edited - ok
+    //Deletes a handgun
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM Handguns WHERE handguns_id = ?";

@@ -1,0 +1,47 @@
+<h1>Ammunition Database</h1>
+
+<table width="800">
+	<col width="200">
+	<col width="200">
+	<col width="200">
+	<col width="200">
+	<style>
+		table {border: 2px solid black;}
+		td, th {border: 1px solid black}
+		th {background: #AED6F1;}
+	</style>
+    <thead> 
+        <th>Ammunition Brand</th> 
+        <th>Ammunition Model</th> 
+        <th>Ammunition Caliber</th>
+        <th>Grain</th>  
+    </thead> 
+    <tbody> 
+        {{#each ammunition}} 
+        <tr> 
+            <td align="center">{{ammunition_brand}}</td> 
+            <td align="center">{{ammunition_model}}</td> 
+            <td align="center">{{ammunition_caliber}}</td> 
+            <td align="center">{{grain}}</td>
+            <td style="border: 0px;"><button onclick="deleteRound({{ammunition_id}})">Delete</button></td>
+            <td style="border: 0px;"><a href="/ammunition/{{ammunition_id}}">Update</a></td>
+        </tr> 
+        {{/each}}	
+    </tbody>
+	
+	<h5>Please fill in the following information to populate the table below.</h5>
+	<form id="addammunition" action="/ammunition" method="post">
+    Ammunition Brand: <input type="text" name="ammunition_brand"><br>
+    Ammunition Model: <input type="text" name="ammunition_model"><br>
+    Ammunition Caliber: <select name="ammunition_caliber"> 
+        {{#each ammunition_caliber}}
+        <option value="{{ammunition_id}}">{{ammunition_caliber}}</option>
+        {{/each}}
+    </select><br>
+    Grain: <input type="number" name="grain"><br>
+    <input type="submit" value="Submit">
+    </form>
+	<br><br>
+</table> 
+<br><br>
+Go <a href="http://flip1.engr.oregonstate.edu:7004/home">Home.</a> 

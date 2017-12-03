@@ -2,7 +2,7 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
 	
-    function getAmmunition(res, mysql, context, complete){
+    function getCaliber(res, mysql, context, complete){
 		mysql.pool.query("SELECT ammunition_id, ammunition_caliber FROM Ammunition", function(error, results, fields){	
             if(error){
                 res.write(JSON.stringify(error));
@@ -12,89 +12,84 @@ module.exports = function(){
             complete();
         });
     }
-	
-    function getRifles(res, mysql, context, complete){     
-		//this query shows SQL-added data and form-added data but does not update caliber correctly
-		/*mysql.pool.query("SELECT Rifles.rifles_id, rifles_brand, rifles_model, rifles_caliber, rifles_barrel_length FROM Rifles INNER JOIN Ammunition A ON A.ammunition_id = Rifles.rifles_id", function(error, results, fields){*/
-		//this query only shows form-added data but updates caliber correctly
-		mysql.pool.query("SELECT Rifles.rifles_id, rifles_brand, rifles_model, Ammunition.ammunition_caliber AS rifles_caliber, rifles_barrel_length FROM Rifles INNER JOIN Ammunition ON rifles_caliber = Ammunition.ammunition_id", function(error, results, fields){		
+
+    function getAmmunition(res, mysql, context, complete){
+        mysql.pool.query("SELECT Ammunition.ammunition_id, ammunition_brand, ammunition_model, ammunition_caliber, grain FROM Ammunition", function(error, results, fields){		
 			if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.rifles = results;
+            context.ammunition = results;
             complete();
         });
     }
-    function getLonggun(res, mysql, context, id, complete){
-		//handguns_id or id ok
-		//do not add any table joins here
-        var sql = "SELECT rifles_id, rifles_brand, rifles_model, rifles_caliber, rifles_barrel_length FROM Rifles WHERE rifles_id = ?";
+    function getRound(res, mysql, context, id, complete){
+        var sql = "SELECT ammunition_id, ammunition_brand, ammunition_model, ammunition_caliber, grain FROM Ammunition WHERE ammunition_id = ?";
         var inserts = [id];	//handguns_id or id ok
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.longgun = results[0];
+            context.round = results[0];
             complete();
         });
     }
 
-    //Displays all rifles
+    //Display all ammunition
     router.get('/', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deletelonggun.js"];
+        context.jsscripts = ["deleteround.js"];
         var mysql = req.app.get('mysql');
-        getRifles(res, mysql, context, complete);
         getAmmunition(res, mysql, context, complete);
+        getCaliber(res, mysql, context, complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 2){
-                res.render('rifles', context);
+                res.render('ammunition', context);
             }
 
         }
     });
 
-    //Displays one rifle for updating
+    //Display one ammunition
     router.get('/:id', function(req, res){
         callbackCount = 0;
         var context = {};
-        context.jsscripts = ["selectedammunition.js", "updatelonggun.js"];
+        context.jsscripts = ["selectedammunition.js", "updateround.js"];
         var mysql = req.app.get('mysql');
-        getLonggun(res, mysql, context, req.params.id, complete);
-        getAmmunition(res, mysql, context, complete);
+        getRound(res, mysql, context, req.params.id, complete);
+        getCaliber(res, mysql, context, complete);
         function complete(){
             callbackCount++;
             if(callbackCount >= 2){
-                res.render('update-longgun', context);
+                res.render('update-round', context);
             }
 
         }
     });
 
-    //Adds a rifle
+    //Adds an ammunition
     router.post('/', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO Rifles (rifles_brand, rifles_model, rifles_caliber, rifles_barrel_length) VALUES (?,?,?,?)";
-        var inserts = [req.body.rifles_brand, req.body.rifles_model, req.body.rifles_caliber, req.body.rifles_barrel_length];
+        var sql = "INSERT INTO Ammunition (ammunition_brand, ammunition_model, ammunition_caliber, grain) VALUES (?,?,?,?)";
+        var inserts = [req.body.ammunition_brand, req.body.ammunition_model, req.body.ammunition_caliber, req.body.grain];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                res.redirect('/rifles');
+                res.redirect('/ammunition');
             }
         });
     });
 
-    //For updating rifles
+    //For updating ammunition
     router.put('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "UPDATE Rifles SET rifles_brand=?, rifles_model=?, rifles_caliber=?, rifles_barrel_length=? WHERE rifles_id = ?";
-        var inserts = [req.body.rifles_brand, req.body.rifles_model, req.body.rifles_caliber, req.body.rifles_barrel_length, req.params.id]; //id ok; comes from url "/:id"
+        var sql = "UPDATE Ammunition SET ammunition_brand=?, ammunition_model=?, ammunition_caliber=?, grain=? WHERE ammunition_id = ?";
+        var inserts = [req.body.ammunition_brand, req.body.ammunition_model, req.body.ammunition_caliber, req.body.grain, req.params.id]; //id ok; comes from url "/:id"
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
@@ -106,10 +101,10 @@ module.exports = function(){
         });
     });
 
-    //Deletes a rifle
+    //Deletes an ammunition
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
-        var sql = "DELETE FROM Rifles WHERE rifles_id = ?";
+        var sql = "DELETE FROM Ammunition WHERE ammunition_id = ?";
         var inserts = [req.params.id]; //id ok; comes from url "/:id"
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){

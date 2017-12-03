@@ -1,0 +1,21 @@
+<h1>Update {{accessory.accessories_brand}} {{accessory.accessories_model}}:</h1>
+<form id="update-accessory" action="/accessories" method="post">
+    Accessory Brand: <input type="text" name="accessories_brand" value="{{accessory.accessories_brand}}"><br>
+    Accessory Model: <input type="text" name="accessories_model" value="{{accessory.accessories_model}}"><br>
+	 Accessory Type: 
+		<select name="accessories_type">
+			<option value="Bipod">Bipod</option>
+			<option value="Flashlight">Flashlight</option>
+			<option value="Holster">Holster</option>
+			<option value="Laser">Laser</option>
+			<option value="Sight">Sight</option>
+			<option value="Scope">Scope</option>
+    </select><br>
+    Compatibility:
+		<select name="compatibility">
+			<option value="Handguns">Handguns</option>
+			<option value="Rifles">Rifles</option>
+		</select><br>
+</form>
+<button onclick="updateAccessory({{accessory.accessories_id}})">Update</button>
+<script defer>selectType({{accessory.accessories_type}});</script>
