@@ -1,13 +1,13 @@
-<h1>Update {{handguns.handguns_brand}} {{handguns.handguns_model}}:</h1>
-<form id="update-handguns" action="/handguns" method="post">
-    Brand: <input type="text" name="handguns_brand" value="{{handguns.handguns_brand}}"><br>
-    Model: <input type="text" name="handguns_model" value="{{handguns.handguns_model}}"><br>
-    Caliber: <select name="handguns_caliber" id="ammunition-selector"> 
+<h1>Update {{pistol.handguns_brand}} {{pistol.handguns_model}}:</h1>
+<form id="update-pistol" action="/handguns" method="post">
+    Handgun Brand: <input type="text" name="handguns_brand" value="{{pistol.handguns_brand}}"><br>
+    Handgun Model: <input type="text" name="handguns_model" value="{{pistol.handguns_model}}"><br>
+	Caliber: <select name="handguns_caliber" id="ammunition-selector"> 
         {{#each ammunition_caliber}}
         <option value="{{ammunition_id}}">{{ammunition_caliber}}</option>
         {{/each}}
     </select><br>
-    Barrel Length: <input type="number" name="handguns_barrel_length" value="{{handguns.handguns_barrel_length}}"><br>
+    Handgun Barrel Length: <input type="number" name="handguns_barrel_length" value="{{pistol.handguns_barrel_length}}"><br>
 </form>
-<button onclick="updatePistol({{pistol.id}})">Update</button>
-<script defer>selectAmmunition({{handguns.handguns_caliber}});</script>
+<button onclick="updatePistol({{pistol.handguns_id}})">Update</button>
+<script defer>selectAmmunition({{pistol.handguns_caliber}});</script>

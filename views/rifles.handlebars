@@ -1,0 +1,45 @@
+<h1>Rifles Database</h1>
+
+<table width="800">
+	<col width="200">
+	<col width="200">
+	<col width="200">
+	<col width="200">
+	<style>
+		table {border: 2px solid black;}
+		td, th {border: 1px solid black}
+		th {background: #AED6F1;}
+	</style>
+    <thead> 
+        <th>Rifle Brand</th> 
+        <th>Rifle Model</th> 
+        <th>Rifle Caliber</th>
+        <th>Rifle Barrel Length</th>  
+    </thead> 
+    <tbody> 
+        {{#each rifles}} 
+        <tr> 
+            <td align="center">{{rifles_brand}}</td> 
+            <td align="center">{{rifles_model}}</td> 
+            <td align="center">{{rifles_caliber}}</td> 
+            <td align="center">{{rifles_barrel_length}}</td>
+            <td style="border: 0px;"><button onclick="deletePistol({{rifles_id}})">Delete</button></td>
+            <td style="border: 0px;"><a href="/rifles/{{rifles_id}}">Update</a></td>
+        </tr> 
+        {{/each}}	
+    </tbody>
+	
+	<h5>Please fill in the following information to populate the table below.</h5>
+	<form id="addrifle" action="/rifles" method="post">
+    Rifle Brand: <input type="text" name="rifles_brand"><br>
+    Rifle Model: <input type="text" name="rifles_model"><br>
+    Caliber: <select name="rifles_caliber"> 
+        {{#each ammunition_caliber}}
+        <option value="{{ammunition_id}}">{{ammunition_caliber}}</option>
+        {{/each}}
+    </select><br>
+    Rifle Barrel Length: <input type="number" name="rifles_barrel_length"><br>
+    <input type="submit" value="Submit">
+    </form>
+	<br><br>
+</table> 

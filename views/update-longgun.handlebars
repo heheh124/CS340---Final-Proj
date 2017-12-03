@@ -1,0 +1,13 @@
+<h1>Update {{longgun.rifles_brand}} {{longgun.rifles_model}}:</h1>
+<form id="update-longgun" action="/rifles" method="post">
+    Rifle Brand: <input type="text" name="rifles_brand" value="{{longgun.rifles_brand}}"><br>
+    Rifle Model: <input type="text" name="rifles_model" value="{{longgun.rifles_model}}"><br>
+    Caliber: <select name="rifles_caliber" id="ammunition-selector"> 
+        {{#each ammunition_caliber}}
+        <option value="{{ammunition_id}}">{{ammunition_caliber}}</option>
+        {{/each}}
+    </select><br>
+    Rifle Barrel Length: <input type="number" name="rifles_barrel_length" value="{{longgun.rifles_barrel_length}}"><br>
+</form>
+<button onclick="updateLonggun({{longgun.rifles_id}})">Update</button>
+<script defer>selectAmmunition({{longgun.rifles_caliber}});</script>

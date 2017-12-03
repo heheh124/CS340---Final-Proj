@@ -16,7 +16,11 @@ app.set('port', process.argv[2]);
 app.set('mysql', mysql);
 app.use(bodyParser.json());
 
+app.get('/', function (req, res){
+	res.render('home');
+})
 app.use('/handguns', require('./handguns.js'));
+app.use('/rifles', require('./rifles.js'));
 
 app.use(function(req,res){
   res.status(404);
